@@ -5,6 +5,7 @@ import User from "./userModel.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import nodemailer from "nodemailer";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,11 @@ app.use(
   })
 );
 app.use(cookieParser());
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // maximum number of requests allowed in the windowMs
+  message: "Too many requests, please try again later.",
+});
 
 // establish mongoose connection
 mongoose
@@ -23,7 +29,7 @@ mongoose
   .catch((err) => console.log(err));
 
 // controllers
-app.post("/auth/register", async (req, res) => {
+app.post("/auth/register", limiter, async (req, res) => {
   const { username, email, password } = req.body;
   const user = await User.findOne({ email });
   console.log(username);
