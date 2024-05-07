@@ -7,7 +7,6 @@ export const verifyUser = async (req, res, next) => {
       return res.json({ status: false, message: "no token" });
     }
     const decoded = jwt.verify(token, "jwtkey");
-    console.log(decoded);
     if (decoded) next();
   } catch (error) {
     console.log("verifyUser", error);

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 
 const ResetPassword = () => {
@@ -22,7 +22,6 @@ const ResetPassword = () => {
     e.preventDefault();
     Axios.post(`http://localhost:5000/auth/reset-password/${token}`, formData)
       .then((response) => {
-        console.log(response);
         if (response.data.status) {
           navigate("/login");
         }

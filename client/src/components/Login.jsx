@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import Axios from "axios";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Axios from "axios";
 
-const Register = () => {
+const Login = () => {
+  Axios.defaults.withCredentials = true;
   const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -16,37 +17,21 @@ const Register = () => {
       ...formData,
       [name]: value,
     });
-    console.log(formData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can access form data from formData state
-    console.log(formData);
-    // Perform any other actions like submitting data to a server
-    Axios.post("http://localhost:5000/auth/register", formData)
+    Axios.post("http://localhost:5000/auth/login", formData)
       .then((response) => {
-        console.log(response);
-        if (response.data.status) navigate("/login");
+        if (response.data.status) navigate("/dashboard");
       })
       .catch((err) => console.log(err));
   };
 
   return (
     <div>
-      <h2>Register</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input
-          type="text"
-          placeholder="username"
-          id="username"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-        />
-        <br />
-        <br />
         <label htmlFor="email">Email: </label>
         <input
           type="text"
@@ -69,13 +54,16 @@ const Register = () => {
         />
         <br />
         <br />
-        <button type="submit">Register</button>
+        <button type="submit">Login</button>
+        <br />
+        <br />
+        <Link to="/forgotpassword">Forgot Password?</Link>
         <p>
-          Already have an account? <Link to="/login">Login</Link>{" "}
+          New User? Register <Link to="/register">Here</Link>
         </p>
       </form>
     </div>
   );
 };
 
-export default Register;
+export default Login;

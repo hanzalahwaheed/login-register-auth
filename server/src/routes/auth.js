@@ -10,7 +10,6 @@ const router = express.Router();
 router.post("/register", limiter, async (req, res) => {
   const { username, email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(username);
   if (user) res.json("user already exists");
   else {
     await User.create({
@@ -59,7 +58,7 @@ router.post("/forgot-password", async (req, res) => {
       from: "seismic924@gmail.com",
       to: email,
       subject: "Password Reset Link",
-      text: `http://localhost:5173/reset-password/${token}`,
+      text: `${process.env.REACT_APP_BASE_URL}/reset-password/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
